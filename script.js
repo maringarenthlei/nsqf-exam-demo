@@ -586,10 +586,10 @@ function showInstructions() {
 
 function restartExam() {
 
-    const confirmed = confirm(
-        "Restart the exam with a new random question set?"
-    );
-
+    //const confirmed = confirm(
+    //    "Restart the exam with a new random question set?"
+    //);
+    const confirmed = true;
     if (!confirmed) {
         return;
     }
