@@ -26,10 +26,10 @@ const studentNameInput = document.getElementById("student-name");
 const startBtn = document.getElementById("start-btn");
 
 const selectedCourseText =
-  document.getElementById("selected-course");
+    document.getElementById("selected-course");
 
 const resultCourse =
-  document.getElementById("result-course");
+    document.getElementById("result-course");
 
 // Exam screen
 const candidateName = document.getElementById("candidate-name");
@@ -72,6 +72,9 @@ const unansweredCountEl = document.getElementById("unanswered-count");
 const percentageValue = document.getElementById("percentage-value");
 const reviewBtn = document.getElementById("review-btn");
 const restartBtn = document.getElementById("restart-btn");
+restartBtn.addEventListener("click", () => {
+    alert("Restart button clicked");
+});
 
 // Review screen
 const reviewList = document.getElementById("review-list");
@@ -85,14 +88,14 @@ async function initializeApp() {
 
         const savedState = loadState();
         const savedName =
-        studentName ||
-        localStorage.getItem("nsqfStudentName") ||
-        "";
+            studentName ||
+            localStorage.getItem("nsqfStudentName") ||
+            "";
 
         const savedCourse =
-        selectedCourse ||
-        localStorage.getItem("nsqfSelectedCourse") ||
-        "";
+            selectedCourse ||
+            localStorage.getItem("nsqfSelectedCourse") ||
+            "";
 
         if (savedState) {
             restoreState(savedState);
@@ -167,37 +170,37 @@ function attachEventListeners() {
 
 function startNewExam() {
 
-  const name = studentNameInput.value.trim();
+    const name = studentNameInput.value.trim();
 
-  if (!name) {
-    alert("Please enter your name before starting the exam.");
-    studentNameInput.focus();
-    return;
-  }
+    if (!name) {
+        alert("Please enter your name before starting the exam.");
+        studentNameInput.focus();
+        return;
+    }
 
-  const selectedCourseRadio =
-    document.querySelector('input[name="course"]:checked');
+    const selectedCourseRadio =
+        document.querySelector('input[name="course"]:checked');
 
-  if (!selectedCourseRadio) {
-    alert("Please select a course.");
-    return;
-  }
+    if (!selectedCourseRadio) {
+        alert("Please select a course.");
+        return;
+    }
 
-  selectedCourse = selectedCourseRadio.value;
+    selectedCourse = selectedCourseRadio.value;
 
-  studentName = name;
+    studentName = name;
 
-  localStorage.setItem(
-    "nsqfStudentName",
-    studentName
-  );
+    localStorage.setItem(
+        "nsqfStudentName",
+        studentName
+    );
 
-  localStorage.setItem(
-    "nsqfSelectedCourse",
-    selectedCourse
-  );
+    localStorage.setItem(
+        "nsqfSelectedCourse",
+        selectedCourse
+    );
 
-  examQuestions = pickRandomQuestions(allQuestions, TOTAL_QUESTIONS);
+    examQuestions = pickRandomQuestions(allQuestions, TOTAL_QUESTIONS);
     answers = {};
     currentQuestionIndex = 0;
     examStartTime = Date.now();
@@ -237,7 +240,7 @@ function showExamScreen() {
     reviewScreen.classList.add("hidden");
 
     candidateName.textContent = `Candidate: ${studentName}`;
-    selectedCourseText.textContent =  `Course : ${selectedCourse}`;
+    selectedCourseText.textContent = `Course : ${selectedCourse}`;
     renderQuestionGrid();
     updateStatusCounts();
 }
@@ -499,7 +502,7 @@ function renderResult() {
 
     resultMessage.textContent = `${studentName}, you have scored ${result.score} out of ${examQuestions.length}.`;
     resultCourse.textContent =
-`Course : ${selectedCourse}`;
+        `Course : ${selectedCourse}`;
     scoreValue.textContent = `${result.score}/${examQuestions.length}`;
     passFailValue.textContent = result.passed ? "Pass" : "Fail";
     correctCountEl.textContent = result.correct;
@@ -582,30 +585,66 @@ function showInstructions() {
 }
 
 function restartExam() {
-    const confirmed = confirm("Restart the exam with a new random question set?");
+
+    const confirmed = confirm(
+        "Restart the exam with a new random question set?"
+    );
 
     if (!confirmed) {
         return;
     }
 
-    const savedName = studentName || localStorage.getItem("nsqfStudentName") || "";
+    const savedName =
+        studentName ||
+        localStorage.getItem("nsqfStudentName") ||
+        "";
+
+    const savedCourse =
+        selectedCourse ||
+        localStorage.getItem("nsqfSelectedCourse") ||
+        "";
 
     localStorage.removeItem(STORAGE_KEY);
 
     studentName = savedName;
     selectedCourse = savedCourse;
-    localStorage.setItem("nsqfStudentName", studentName);
 
-    examQuestions = pickRandomQuestions(allQuestions, TOTAL_QUESTIONS);
+    localStorage.setItem(
+        "nsqfStudentName",
+        studentName
+    );
+
+    localStorage.setItem(
+        "nsqfSelectedCourse",
+        selectedCourse
+    );
+
+    examQuestions = pickRandomQuestions(
+        allQuestions,
+        TOTAL_QUESTIONS
+    );
+
     answers = {};
     currentQuestionIndex = 0;
+
     examStartTime = Date.now();
-    examEndTime = examStartTime + EXAM_DURATION_MINUTES * 60 * 1000;
+
+    examEndTime =
+        examStartTime +
+        EXAM_DURATION_MINUTES * 60 * 1000;
+
     examFinished = false;
 
     saveState();
+
     showExamScreen();
+
+    renderQuestionGrid();
+
     renderQuestion();
+
+    updateStatusCounts();
+
     startTimer();
 }
 
