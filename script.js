@@ -701,3 +701,21 @@ function restoreState(state) {
         examEndTime = examStartTime + EXAM_DURATION_MINUTES * 60 * 1000;
     }
 }
+document.addEventListener("DOMContentLoaded", () => {
+
+    const restartBtn =
+        document.getElementById("restart-btn");
+
+    if (restartBtn) {
+
+        restartBtn.addEventListener("touchstart", () => {
+            alert("Touch detected");
+        });
+
+        restartBtn.addEventListener("click", () => {
+            alert("Click detected");
+        });
+
+    }
+
+});
